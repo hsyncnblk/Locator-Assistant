@@ -1,3 +1,3 @@
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Smart Locator Pro yüklendi.");
-});
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error(error));

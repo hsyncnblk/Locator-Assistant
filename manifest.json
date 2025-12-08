@@ -1,15 +1,23 @@
 {
   "manifest_version": 3,
-  "name": "Smart Locator Pro",
-  "version": "1.0",
-  "description": "Dinamik ID'leri filtreleyen ve Playwright/Cypress uyumlu locator üreten akıllı asistan.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "name": "Locator Pro: Smart Side Panel",
+  "version": "2.0",
+  "description": "F12 gerektirmeyen, akıllı ve kalıcı locator asistanı.",
+  "permissions": ["sidePanel", "scripting", "activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup.html",
-    "default_title": "Locator Oluştur"
+    "default_title": "Locator Pro'yu Aç",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "content_scripts": [
     {
@@ -17,5 +25,10 @@
       "js": ["content.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
 }

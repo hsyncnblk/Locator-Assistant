@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand">
+      <span class="logo-icon">🎯</span> Locator Pro
+    </div>
+    <button id="close-btn" class="close-btn" title="Paneli Kapat">✕</button>
+  </div>
+
+  <div class="controls">
+    <div class="control-row">
+      <span id="status-text">Seçim Kapalı</span>
+      <label class="switch">
+        <input type="checkbox" id="toggle-picker">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <select id="framework-select">
+      <option value="selenium-pf">Selenium (Page Factory)</option>
+      <option value="playwright">Playwright (JS/TS)</option>
+      <option value="selenium">Selenium (Normal)</option>
+      <option value="cypress">Cypress</option>
+      <option value="css">Sadece String (Raw)</option>
+    </select>
+  </div>
+
+  <div id="results-container">
+    <div class="empty-state">
+      <div class="empty-icon">👆</div>
+      <p>Yukarıdan <b>Seçimi Aç</b> ve<br>sayfada bir elemente tıkla.</p>
+    </div>
+  </div>
+
+  <div id="notification" class="toast">Kopyalandı! ✅</div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
