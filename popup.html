@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Locator</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h3>Smart Locator <span>PRO</span></h3>
+    <div class="toggle-container">
+      <label class="switch">
+        <input type="checkbox" id="toggle-picker">
+        <span class="slider round"></span>
+      </label>
+      <span id="status-text">Seçim Kapalı</span>
+    </div>
+  </div>
+
+  <div id="instruction" class="hint">Sayfada bir elemente tıklayın.</div>
+  
+  <div id="results-container"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
