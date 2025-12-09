@@ -7,15 +7,21 @@ const resultsDiv = document.getElementById("results-container");
 const notification = document.getElementById("notification");
 const closeBtn = document.getElementById("close-btn");
 
-// 1. KAPATMA BUTONU
+// *** YENİ EKLEME: PANEL AÇILDIĞINDA DURUMU KAYDET ***
+// Sidepanel yüklendiğinde (yani panel açıldığında) true olarak ayarla.
+chrome.storage.local.set({ isPickingActive: true });
+
+// 1. KAPANMA BUTONU (Sizin eklediğiniz) - GÜNCELLENDİ
 closeBtn.addEventListener("click", () => {
-  // *** YENİ EKLENEN/GÜNCELLENEN KOD BAŞLANGICI: Çarpı butonuna basınca toggle'ı pasifleştir.
+  // Çarpı butonuna basınca toggle'ı pasifleştir.
   if (toggle.checked) {
     toggle.checked = false;
     statusText.textContent = "Seçim Kapalı";
     statusText.style.color = "#888";
   }
-  // *** YENİ EKLENEN/GÜNCELLENEN KOD BİTİŞİ ***
+  
+  // Storage'ı manuel olarak kapat
+  chrome.storage.local.set({ isPickingActive: false }); 
 
   sendMsg("stopPicking"); // Content Script'e Seçim modunu kapatma emri gönder
   window.close();         // Yan paneli kapat
@@ -44,13 +50,26 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
+// *** YENİ EKLEME: TARAYICI ÇERÇEVESİNDEN KAPATMA (pagehide) ***
+// Bu, tarayıcının kendi çarpı butonu ile kapatıldığında dahi modu kapatmayı garanti eder.
+window.addEventListener('pagehide', () => {
+  // *** PANEL KAPANDIĞINDA DURUMU FALSE OLARAK KAYDET ***
+  chrome.storage.local.set({ isPickingActive: false }); 
+
+  // Eğer seçim modu açıksa, temizlik mesajını gönder.
+  if (toggle.checked) {
+    sendMsg("stopPicking");
+  }
+});
+
 // --- FONKSİYONLAR ---
 
 function sendMsg(action) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs[0]?.id) {
+      // Hata yakalama bloğu kaldırıldı (sessiz hata yönetimi).
       chrome.tabs.sendMessage(tabs[0].id, { action: action }).catch(() => {
-        resultsDiv.innerHTML = `<div class="empty-state" style="color:#ff6b6b">⚠️ Hata: Lütfen sayfayı bir kez yenileyin (F5).</div>`;
+        // Hata durumunda (panel kapalıysa) kullanıcıya uyarı göstermiyoruz.
       });
     }
   });
@@ -86,10 +105,9 @@ function renderResults(locators) {
   });
 }
 
-// --- BURASI GÜNCELLENDİ: PAGE FACTORY DESTEĞİ ---
+// --- PAGE FACTORY DESTEĞİ ---
 function formatCode(loc) {
   const val = loc.value;
-  // Değişken ismi yoksa varsayılan 'element' olsun
   const varName = loc.varName || "element";
 
   switch (currentFramework) {
@@ -97,10 +115,9 @@ function formatCode(loc) {
       let strategy = "xpath";
       let actualVal = val;
 
-      // Locator türüne göre doğru stratejiyi seç
       if (loc.type === "ID") {
         strategy = "id";
-        actualVal = val.replace("#", ""); // CSS ID (#) işaretini kaldır
+        actualVal = val.replace("#", ""); 
       } else if (loc.type === "Name") {
         strategy = "name";
         actualVal = val.replace('[name="', '').replace('"]', '');
@@ -110,13 +127,10 @@ function formatCode(loc) {
         strategy = "xpath";
         actualVal = `//*[normalize-space()='${val}']`;
       } else if (!val.startsWith("//") && !val.startsWith("(")) {
-        // Eğer // ile başlamıyorsa ve yukarıdakilerden biri değilse CSS'dir
         strategy = "css";
       }
 
-      // Format: @FindBy(id = "user") private WebElement userInput;
-      // 'public' kelimesi 'private' olarak değiştirildi
-      // HTML karakterlerini (örn: &nbsp;) kaçış karakterine çevirmek gerekebilir ama şimdilik raw bırakıyoruz.
+      // 'private' olarak güncellenmiş kod
       return `@FindBy(${strategy} = "${actualVal}")\n private WebElement ${varName};`;
 
     case "playwright":
