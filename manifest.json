@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Locator Assistant",
-  "version": "2.3",
+  "name": "Locator Pro: Smart Side Panel",
+  "version": "1.1",
   "description": "F12 gerektirmeyen, akıllı ve kalıcı locator asistanı.",
-  "permissions": ["sidePanel", "scripting", "activeTab", "storage"],
+  "permissions": ["sidePanel", "activeTab", "storage"],
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_title": "Locator Pro'yu Aç",
