@@ -1,4 +1,4 @@
-let currentFramework = "selenium-pf"; // Varsayılan olarak Page Factory seçili gelsin
+let currentFramework = "selenium-pf";
 
 const toggle = document.getElementById("toggle-picker");
 const statusText = document.getElementById("status-text");
@@ -7,27 +7,25 @@ const resultsDiv = document.getElementById("results-container");
 const notification = document.getElementById("notification");
 const closeBtn = document.getElementById("close-btn");
 
-// *** YENİ EKLEME: PANEL AÇILDIĞINDA DURUMU KAYDET ***
-// Sidepanel yüklendiğinde (yani panel açıldığında) true olarak ayarla.
+
 chrome.storage.local.set({ isPickingActive: true });
 
-// 1. KAPANMA BUTONU (Sizin eklediğiniz) - GÜNCELLENDİ
+
 closeBtn.addEventListener("click", () => {
-  // Çarpı butonuna basınca toggle'ı pasifleştir.
+
   if (toggle.checked) {
     toggle.checked = false;
     statusText.textContent = "Seçim Kapalı";
     statusText.style.color = "#888";
   }
   
-  // Storage'ı manuel olarak kapat
+
   chrome.storage.local.set({ isPickingActive: false }); 
 
-  sendMsg("stopPicking"); // Content Script'e Seçim modunu kapatma emri gönder
-  window.close();         // Yan paneli kapat
+  sendMsg("stopPicking"); 
+  window.close();         
 });
 
-// 2. TOGGLE DEĞİŞİMİ
 toggle.addEventListener("change", () => {
   const isOn = toggle.checked;
   statusText.textContent = isOn ? "Seçim Modu: AÇIK" : "Seçim Kapalı";
@@ -36,40 +34,32 @@ toggle.addEventListener("change", () => {
   sendMsg(isOn ? "startPicking" : "stopPicking");
 });
 
-// 3. FRAMEWORK DEĞİŞİMİ
 frameworkSelect.addEventListener("change", (e) => {
   currentFramework = e.target.value;
-  // Not: Anlık güncelleme için sonuçları yeniden render etmek gerekir,
-  // şimdilik yeni seçimde geçerli olacak.
+
 });
 
-// 4. SONUÇLARI AL
+
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === "locatorFound") {
     renderResults(msg.locators);
   }
 });
 
-// *** YENİ EKLEME: TARAYICI ÇERÇEVESİNDEN KAPATMA (pagehide) ***
-// Bu, tarayıcının kendi çarpı butonu ile kapatıldığında dahi modu kapatmayı garanti eder.
+
 window.addEventListener('pagehide', () => {
-  // *** PANEL KAPANDIĞINDA DURUMU FALSE OLARAK KAYDET ***
   chrome.storage.local.set({ isPickingActive: false }); 
 
-  // Eğer seçim modu açıksa, temizlik mesajını gönder.
   if (toggle.checked) {
     sendMsg("stopPicking");
   }
 });
 
-// --- FONKSİYONLAR ---
 
 function sendMsg(action) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs[0]?.id) {
-      // Hata yakalama bloğu kaldırıldı (sessiz hata yönetimi).
       chrome.tabs.sendMessage(tabs[0].id, { action: action }).catch(() => {
-        // Hata durumunda (panel kapalıysa) kullanıcıya uyarı göstermiyoruz.
       });
     }
   });
@@ -81,7 +71,6 @@ function renderResults(locators) {
   locators.forEach(loc => {
     const formattedCode = formatCode(loc);
     
-    // Güven rengi
     let scoreClass = "score-low";
     if (loc.score >= 90) scoreClass = "score-high";
     else if (loc.score >= 60) scoreClass = "score-mid";
@@ -105,7 +94,6 @@ function renderResults(locators) {
   });
 }
 
-// --- PAGE FACTORY DESTEĞİ ---
 function formatCode(loc) {
   const val = loc.value;
   const varName = loc.varName || "element";
@@ -130,7 +118,7 @@ function formatCode(loc) {
         strategy = "css";
       }
 
-      // 'private' olarak güncellenmiş kod
+      // 'private'
       return `@FindBy(${strategy} = "${actualVal}")\n private WebElement ${varName};`;
 
     case "playwright":
@@ -143,11 +131,11 @@ function formatCode(loc) {
       if (loc.type === "Text") return `cy.contains('${val}').click();`;
       return `cy.get('${val}').should('be.visible');`;
 
-    case "selenium": // Normal Selenium
+    case "selenium": 
       if (val.startsWith("//")) return `driver.findElement(By.xpath("${val}"));`;
       return `driver.findElement(By.cssSelector("${val}"));`;
 
-    default: // Raw String
+    default:
       return val;
   }
 }
