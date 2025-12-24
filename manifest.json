@@ -1,12 +1,12 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 4,
   "name": "Müfettiş-ül Element",
   "version": "1.5",
   "description": "F12 gerektirmeyen, akıllı ve kalıcı locator asistanı.",
   "permissions": ["sidePanel", "activeTab", "storage"],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_title": "Locator Pro'yu Aç",
+    "default_title": "Müfettiş-ül Element'i Aç",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
