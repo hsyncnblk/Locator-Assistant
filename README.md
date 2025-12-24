@@ -1,12 +1,12 @@
-# Gizlilik Politikası: Locator Pro Chrome Uzantısı
+# Gizlilik Politikası: Müfettiş-ül Element Chrome Uzantısı
 
-Bu Gizlilik Politikası, Locator Pro Chrome Uzantısı'nın ("Uygulama") geliştiricisi tarafından yönetilmektedir. Uygulama, otomasyon geliştiricilerine web sayfalarındaki elementler için güvenilir locator'lar oluşturma amacına hizmet eden tek amaçlı bir araçtır.
+Bu Gizlilik Politikası, Müfettiş-ül Element Chrome Uzantısı'nın ("Uygulama") geliştiricisi tarafından yönetilmektedir. Uygulama, otomasyon geliştiricilerine web sayfalarındaki elementler için güvenilir locator'lar oluşturma amacına hizmet eden tek amaçlı bir araçtır.
 
 ---
 
 ## 1. Toplanan Bilgiler ve Veri Kullanımı
 
-Locator Pro Uzantısı, kullanıcı gizliliğine mutlak saygı göstermek üzere tasarlanmıştır.
+Müfettiş-ül Element Uzantısı, kullanıcı gizliliğine mutlak saygı göstermek üzere tasarlanmıştır.
 
 ### A. Veri Toplanmaz
 
@@ -33,7 +33,7 @@ Uygulama, Tek Amaç İlkesi'ne bağlı kalır. Talep edilen izinler, sadece loca
 * `scripting`: Elementleri vurgulama ve tıklama olaylarını yakalama işlevi için `content.js` betiğini aktif sekmedeki sayfalara enjekte etmek için.
 * `activeTab`: `scripting` operasyonlarının sadece kullanıcının o an etkileşimde olduğu sekmede gerçekleşmesini sağlamak için.
 * `storage`: Kullanıcının seçtiği framework'ü ve `isPickingActive` durumunu cihazda güvenli bir şekilde depolamak için.
-* `host_permissions` (`<all_urls>`): Locator Pro'nun tüm web sitelerinde (test ortamları dahil) element bulma temel işlevini yerine getirmesi için gereklidir.
+* `host_permissions` (`<all_urls>`): Müfettiş-ül Element'in tüm web sitelerinde (test ortamları dahil) element bulma temel işlevini yerine getirmesi için gereklidir.
 
 ---
 
